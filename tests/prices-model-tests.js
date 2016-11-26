@@ -1,11 +1,8 @@
 'use strict';
 var assert = require('chai').assert;
-// var sinon = require('sinon');
 var atomus = require('atomus');
 
-var xhr;
-
-describe('PricesModel', function() {
+describe('Prices', function() {
 
     var browser;
 
@@ -46,28 +43,25 @@ describe('PricesModel', function() {
             .external('prices-model.js');
     });
 
-    afterEach(function() {
-
-    });
-
-    it('should exist', function() {
+    it('Can be initialised', function() {
         browser.ready(function(errors, window) {
-            var model = new window.PricesModel();
+            var model = new window.Prices();
             assert.isDefined(model);
         });
     });
 
-    describe('#getData()', function () {
+    describe('getData()', function () {
 
-        it('should make AJAX request', function (done) {
+        it('Makes an AJAX request', function (done) {
 
             var requestMade = false;
 
             browser.ready(function (errors, window) {
 
                 browser.addXHRMock(mockups);
+                var prices = new window.Prices();
 
-                window.getData("E17", function () {
+                prices.getData("E17", function () {
                     requestMade = true;
                     assert.isTrue(requestMade);
                     done();
@@ -75,26 +69,28 @@ describe('PricesModel', function() {
             });
         });
 
-        it('should call the correct URL', function (done) {
+        it('Calls the correct URL', function (done) {
 
             browser.ready(function (errors, window) {
 
                 browser.addXHRMock(mockups);
+                var prices = new window.Prices();
 
-                window.getData("E17", function (result, url) {
+                prices.getData("E17", function (result, url) {
                     assert.equal(url, "/prices/E17");
                     done();
                 });
             });
         });
 
-        it('should return the correct values', function (done) {
+        it('Returns the correct values', function (done) {
 
             browser.ready(function (errors, window) {
 
                 browser.addXHRMock(mockups);
+                var prices = new window.Prices();
 
-                window.getData("E17", function (model, url) {
+                prices.getData("E17", function (model, url) {
                     assert.equal(model.outcode, "E17");
                     assert.equal(model.areaName, "London");
                     assert.equal(model.averagePrice, 100);
@@ -109,17 +105,37 @@ describe('PricesModel', function() {
             });
         });
 
-        it('should return an error with an invalid request', function (done) {
+        it('Returns an error when given an invalid request', function (done) {
 
             browser.ready(function (errors, window) {
 
                 browser.addXHRMock(mockups);
+                var prices = new window.Prices();
 
-                window.getData("invalid", function (model, url, error) {
+                prices.getData("invalid", function (model, url, error) {
                     assert.isDefined(error);
                     done();
                 });
             });
         });
     });
+});
+
+describe('PricesModel', function() {
+
+    var browser;
+
+    beforeEach(function() {
+        browser = atomus()
+            .external('prices-model.js');
+    });
+
+    it('Can be initialised', function() {
+        browser.ready(function(errors, window) {
+            var model = new window.PricesModel();
+            assert.isDefined(model);
+        });
+    });
+
+    // TODO: Add tests for mandatory parameters (outcode, location, average price)
 });
