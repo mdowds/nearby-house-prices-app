@@ -33,8 +33,18 @@ describe('Prices', function() {
             }
         },
         {
-            url: '/prices/empty',
-            response: null
+            url: '/prices/missing',
+            response: JSON.stringify({
+                "averagePrice": 100,
+                "detachedAverage": 101,
+                "flatAverage": 102,
+                "outcode": "E17",
+                "pastAveragePrice": 0,
+                "priceChange": 0,
+                "semiDetachedAverage": 103,
+                "terracedAverage": 104,
+                "transactionCount": 105
+            })
         }
     ];
 
@@ -130,12 +140,13 @@ describe('PricesModel', function() {
             .external('prices-model.js');
     });
 
-    it('Can be initialised', function() {
+    it('Can be initialised', function(done) {
         browser.ready(function(errors, window) {
             var model = new window.PricesModel();
             assert.isDefined(model);
+
+            done();
         });
     });
 
-    // TODO: Add tests for mandatory parameters (outcode, location, average price)
 });

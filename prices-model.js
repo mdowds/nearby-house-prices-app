@@ -1,4 +1,5 @@
 var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, flatAverage, semiDetachedAverage, terracedAverage, transactionCount) {
+
     this.outcode = outcode;
     this.areaName = areaName;
     this.averagePrice = averagePrice;

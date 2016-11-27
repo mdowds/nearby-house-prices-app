@@ -9,7 +9,7 @@ describe('PricesController', function() {
 
     beforeEach(function() {
         browser = atomus()
-            .html('<h2 id="location"></h2><div id="average-price"></div><div id="transaction-count"></div>')
+            .html('<h2 id="location"></h2><div id="average-price"></div><div id="transaction-count"></div><div id="error-message"></div>')
             .external('prices-model.js')
             .external('prices-controller.js');
     });
@@ -79,9 +79,65 @@ describe('PricesController', function() {
 
                 controller.updateView("E17");
 
-                assert.equal($('#location').html(), model.areaName);
+                assert.equal($('#location').html(), "E17 (London)");
                 assert.equal($('#average-price').html(), "£100,000");
                 assert.equal($('#transaction-count').html(), "1000");
+
+                getData.restore();
+                done();
+            });
+        });
+
+        it('Displays an error when averagePrice data is missing', function(done) {
+            browser.ready(function(errors, window) {
+                var $ = browser.$;
+                var model = new window.PricesModel("E17", "London", null, 101000, 102000, 103000, 104000, 1000);
+
+                var prices = new window.Prices();
+                var getData = sinon.stub(prices, "getData");
+                getData.callsArgWith(1, model);
+                var controller = new window.PricesController(prices);
+
+                controller.updateView("E17");
+
+                assert.equal($('#error-message').html(), "Sorry, an error has occured");
+
+                getData.restore();
+                done();
+            });
+        });
+
+        it('Omits area name when it is missing from data', function(done) {
+            browser.ready(function(errors, window) {
+                var $ = browser.$;
+                var model = new window.PricesModel("E17", null, 100000, 101000, 102000, 103000, 104000, 1000);
+
+                var prices = new window.Prices();
+                var getData = sinon.stub(prices, "getData");
+                getData.callsArgWith(1, model);
+                var controller = new window.PricesController(prices);
+
+                controller.updateView("E17");
+
+                assert.equal($('#location').html(), "E17");
+
+                getData.restore();
+                done();
+            });
+        });
+
+        it('Handles getData returning an error', function(done) {
+            browser.ready(function(errors, window) {
+                var $ = browser.$;
+
+                var prices = new window.Prices();
+                var getData = sinon.stub(prices, "getData");
+                getData.callsArgWith(1, null, null, "An error has occured");
+                var controller = new window.PricesController(prices);
+
+                controller.updateView("E17");
+
+                assert.equal($('#error-message').html(), "Sorry, an error has occured");
 
                 getData.restore();
                 done();

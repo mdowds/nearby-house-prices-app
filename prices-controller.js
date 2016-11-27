@@ -3,13 +3,26 @@ var PricesController = function(priceObj){
 
     this.updateView = function (outcode) {
         if(outcode){
-            this.prices.getData(outcode, function(model, url){
-                $('#location').html(model.areaName);
+            this.prices.getData(outcode, function(model, url, error){
 
-                var formattedPrice = "£" + model.averagePrice.toLocaleString('en-GB');
-                $('#average-price').html(formattedPrice);
+                if(error != null || model.averagePrice == null){
+                    $('#error-message').html("Sorry, an error has occured");
+                } else {
 
-                $('#transaction-count').html(model.transactionCount);
+                    var locationString;
+                    if(model.areaName == null){
+                        locationString = outcode;
+                    } else {
+                        locationString = outcode + " (" + model.areaName + ")";
+                    }
+
+                    $('#location').html(locationString);
+
+                    var formattedPrice = "£" + model.averagePrice.toLocaleString('en-GB');
+                    $('#average-price').html(formattedPrice);
+
+                    $('#transaction-count').html(model.transactionCount);
+                }
             });
         }
     };
