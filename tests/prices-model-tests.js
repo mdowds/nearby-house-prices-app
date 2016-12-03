@@ -1,41 +1,31 @@
 'use strict';
 var assert = require('chai').assert;
-var atomus = require('atomus');
-var prices = require('../prices-model.js');
+var sinon = require('sinon');
+var proxyquire = require('proxyquire');
 
 describe('Prices-Model', function() {
 
-    var browser;
+    it('Can be initialised', function() {
+        var prices = require('../prices-model');
+        assert.isDefined(prices);
+    });
 
-    var mockups = [
-        {
-            url: '/prices/E17',
-            response: {
-                status: 200,
-                responseText: JSON.stringify({
-                    "areaName": "London",
-                    "averagePrice": 100,
-                    "detachedAverage": 101,
-                    "flatAverage": 102,
-                    "outcode": "E17",
-                    "pastAveragePrice": 0,
-                    "priceChange": 0,
-                    "semiDetachedAverage": 103,
-                    "terracedAverage": 104,
-                    "transactionCount": 105
-                })
-            }
-        },
-        {
-            url: '/prices/invalid',
-            response: {
-                status: 500,
-                responseText: JSON.stringify({ "error": "An error occured: no valid data returned"})
-            }
-        },
-        {
-            url: '/prices/missing',
-            response: JSON.stringify({
+    describe('getPricesData()', function () {
+
+        it('Calls get with the correct URL', function () {
+
+            var getStub = sinon.stub();
+            var mockUtils = { get: getStub };
+            var prices = proxyquire('../prices-model', {'./utils': mockUtils});
+
+            prices.getPricesData("E17");
+            assert.isTrue(getStub.calledWith("/prices/E17"));
+        });
+
+        it('Returns the correct values', function (done) {
+
+            var response = JSON.stringify({
+                "areaName": "London",
                 "averagePrice": 100,
                 "detachedAverage": 101,
                 "flatAverage": 102,
@@ -45,94 +35,49 @@ describe('Prices-Model', function() {
                 "semiDetachedAverage": 103,
                 "terracedAverage": 104,
                 "transactionCount": 105
-            })
-        },
-        {
-            url: '/prices/httperror',
-            response: {
-                status: 404
-            }
-        }
-    ];
-
-    beforeEach(function() {
-        browser = atomus().external('prices-model.js');
-    });
-
-    it('Can be initialised', function() {
-        assert.isDefined(prices);
-    });
-
-    describe('getPricesData()', function () {
-
-        it('Makes an AJAX request', function (done) {
-
-            var requestMade = false;
-
-            browser.ready(function (errors, window) {
-                browser.addXHRMock(mockups);
-
-                prices.getPricesData("E17", function () {
-                    requestMade = true;
-                    assert.isTrue(requestMade);
-                    done();
-                });
             });
-        });
 
-        it('Calls the correct URL', function (done) {
+            var getStub = sinon.stub().callsArgWith(1, response, 200); // Call the second arg (1) passed to getStub as a callback, with other params as params for the callback
+            var mockUtils = { get: getStub };
+            var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            browser.ready(function (errors, window) {
-                browser.addXHRMock(mockups);
+            prices.getPricesData("E17", function (model) {
+                assert.equal(model.outcode, "E17");
+                assert.equal(model.areaName, "London");
+                assert.equal(model.averagePrice, 100);
+                assert.equal(model.detachedAverage, 101);
+                assert.equal(model.flatAverage, 102);
+                assert.equal(model.semiDetachedAverage, 103);
+                assert.equal(model.terracedAverage, 104);
+                assert.equal(model.transactionCount, 105);
 
-                prices.getPricesData("E17", function (result, url) {
-                    assert.equal(url, "/prices/E17");
-                    done();
-                });
-            });
-        });
-
-        it('Returns the correct values', function (done) {
-
-            browser.ready(function (errors, window) {
-                browser.addXHRMock(mockups);
-
-                prices.getPricesData("E17", function (model, url) {
-                    assert.equal(model.outcode, "E17");
-                    assert.equal(model.areaName, "London");
-                    assert.equal(model.averagePrice, 100);
-                    assert.equal(model.detachedAverage, 101);
-                    assert.equal(model.flatAverage, 102);
-                    assert.equal(model.semiDetachedAverage, 103);
-                    assert.equal(model.terracedAverage, 104);
-                    assert.equal(model.transactionCount, 105);
-
-                    done();
-                });
+                done();
             });
         });
 
         it('Returns an error when given an invalid request', function (done) {
 
-            browser.ready(function (errors, window) {
-                browser.addXHRMock(mockups);
+            var response = JSON.stringify({ "error": "An error occured: no valid data returned"});
 
-                prices.getPricesData("invalid", function (model, url, error) {
-                    assert.isDefined(error);
-                    done();
-                });
+            var getStub = sinon.stub().callsArgWith(1, response, 500);
+            var mockUtils = { get: getStub };
+            var prices = proxyquire('../prices-model', {'./utils': mockUtils});
+
+            prices.getPricesData("invalid", function (model, url, error) {
+                assert.isDefined(error);
+                done();
             });
         });
 
         it('Returns an error when there is a HTTP error', function (done) {
 
-            browser.ready(function (errors, window) {
-                browser.addXHRMock(mockups);
+            var getStub = sinon.stub().callsArgWith(1, null, 404);
+            var mockUtils = { get: getStub };
+            var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-                prices.getPricesData("httperror", function (model, url, error) {
-                    assert.isDefined(error);
-                    done();
-                });
+            prices.getPricesData("invalid", function (model, url, error) {
+                assert.isDefined(error);
+                done();
             });
         });
     });

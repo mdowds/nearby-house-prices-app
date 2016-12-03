@@ -1,3 +1,6 @@
+'use strict';
+var get = require('./utils').get;
+
 var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, flatAverage, semiDetachedAverage, terracedAverage, transactionCount) {
 
     this.outcode = outcode;
@@ -8,17 +11,6 @@ var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, fla
     this.semiDetachedAverage = semiDetachedAverage;
     this.terracedAverage = terracedAverage;
     this.transactionCount = transactionCount;
-};
-
-var get = function(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.onreadystatechange = function(){
-        if(xhr.readyState ==  4){
-            callback(xhr.responseText, xhr.status);
-        }
-    };
-    xhr.send();
 };
 
 var getPricesData = function(outcode, callback) {
@@ -48,7 +40,6 @@ var getPricesData = function(outcode, callback) {
         }
     });
 };
-
 
 module.exports = {
     getPricesData: getPricesData
