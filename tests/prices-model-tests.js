@@ -1,8 +1,9 @@
 'use strict';
 var assert = require('chai').assert;
 var atomus = require('atomus');
+var prices = require('../prices-model.js');
 
-describe('Prices', function() {
+describe('Prices-Model', function() {
 
     var browser;
 
@@ -45,33 +46,33 @@ describe('Prices', function() {
                 "terracedAverage": 104,
                 "transactionCount": 105
             })
+        },
+        {
+            url: '/prices/httperror',
+            response: {
+                status: 404
+            }
         }
     ];
 
     beforeEach(function() {
-        browser = atomus()
-            .external('prices-model.js');
+        browser = atomus().external('prices-model.js');
     });
 
     it('Can be initialised', function() {
-        browser.ready(function(errors, window) {
-            var model = new window.Prices();
-            assert.isDefined(model);
-        });
+        assert.isDefined(prices);
     });
 
-    describe('getData()', function () {
+    describe('getPricesData()', function () {
 
         it('Makes an AJAX request', function (done) {
 
             var requestMade = false;
 
             browser.ready(function (errors, window) {
-
                 browser.addXHRMock(mockups);
-                var prices = new window.Prices();
 
-                prices.getData("E17", function () {
+                prices.getPricesData("E17", function () {
                     requestMade = true;
                     assert.isTrue(requestMade);
                     done();
@@ -82,11 +83,9 @@ describe('Prices', function() {
         it('Calls the correct URL', function (done) {
 
             browser.ready(function (errors, window) {
-
                 browser.addXHRMock(mockups);
-                var prices = new window.Prices();
 
-                prices.getData("E17", function (result, url) {
+                prices.getPricesData("E17", function (result, url) {
                     assert.equal(url, "/prices/E17");
                     done();
                 });
@@ -96,11 +95,9 @@ describe('Prices', function() {
         it('Returns the correct values', function (done) {
 
             browser.ready(function (errors, window) {
-
                 browser.addXHRMock(mockups);
-                var prices = new window.Prices();
 
-                prices.getData("E17", function (model, url) {
+                prices.getPricesData("E17", function (model, url) {
                     assert.equal(model.outcode, "E17");
                     assert.equal(model.areaName, "London");
                     assert.equal(model.averagePrice, 100);
@@ -118,35 +115,25 @@ describe('Prices', function() {
         it('Returns an error when given an invalid request', function (done) {
 
             browser.ready(function (errors, window) {
-
                 browser.addXHRMock(mockups);
-                var prices = new window.Prices();
 
-                prices.getData("invalid", function (model, url, error) {
+                prices.getPricesData("invalid", function (model, url, error) {
+                    assert.isDefined(error);
+                    done();
+                });
+            });
+        });
+
+        it('Returns an error when there is a HTTP error', function (done) {
+
+            browser.ready(function (errors, window) {
+                browser.addXHRMock(mockups);
+
+                prices.getPricesData("httperror", function (model, url, error) {
                     assert.isDefined(error);
                     done();
                 });
             });
         });
     });
-});
-
-describe('PricesModel', function() {
-
-    var browser;
-
-    beforeEach(function() {
-        browser = atomus()
-            .external('prices-model.js');
-    });
-
-    it('Can be initialised', function(done) {
-        browser.ready(function(errors, window) {
-            var model = new window.PricesModel();
-            assert.isDefined(model);
-
-            done();
-        });
-    });
-
 });

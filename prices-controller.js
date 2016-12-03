@@ -1,12 +1,12 @@
 var PricesController = function(priceObj){
     this.prices = priceObj;
 
-    this.updateView = function (outcode) {
+    var updateView = function (outcode) {
         if(outcode){
             this.prices.getData(outcode, function(model, url, error){
 
                 if(error != null || model.averagePrice == null){
-                    $('#error-message').html("Sorry, an error has occured");
+                    $('#error-message').html("Sorry, an error has occurred");
                 } else {
 
                     var locationString;
@@ -26,4 +26,8 @@ var PricesController = function(priceObj){
             });
         }
     };
+};
+
+module.exports = {
+    controller: PricesController
 };
