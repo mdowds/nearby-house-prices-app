@@ -30,17 +30,18 @@ var getPricesData = function(outcode, callback) {
                 data.transactionCount
             );
 
-            callback(model, url);
+            callback(null, model);
         } else if (status === 500){
             var error = JSON.parse(response).error;
-            callback(null, url, error);
+            callback(error);
         } else {
             var error = {"error": "An unhandled request error was returned with status " + status};
-            callback(null, url, error);
+            callback(error);
         }
     });
 };
 
 module.exports = {
-    getPricesData: getPricesData
+    getPricesData: getPricesData,
+    createModel: PricesModel
 };

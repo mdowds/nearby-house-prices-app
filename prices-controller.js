@@ -1,33 +1,45 @@
-var PricesController = function(priceObj){
-    this.prices = priceObj;
+'use strict';
+var model = require('./prices-model');
 
-    var updateView = function (outcode) {
-        if(outcode){
-            this.prices.getData(outcode, function(model, url, error){
+var viewElements = function(errorElement, locationElement, averagePriceElement, transactionCountElement) {
+    this.errorMessage = errorElement;
+    this.location = locationElement;
+    this.averagePrice = averagePriceElement;
+    this.transactionCount = transactionCountElement;
+};
 
-                if(error != null || model.averagePrice == null){
-                    $('#error-message').html("Sorry, an error has occurred");
+var updateView = function (outcode, viewElements) {
+
+    if(outcode){
+        model.getPricesData(outcode, function(error, response){
+
+            if(error != null || response.averagePrice == null){
+                viewElements.errorMessage = "Sorry, an error has occurred"
+                // $('#error-message').html("Sorry, an error has occurred");
+            } else {
+
+                var locationString;
+                if(response.areaName == null){
+                    locationString = outcode;
                 } else {
-
-                    var locationString;
-                    if(model.areaName == null){
-                        locationString = outcode;
-                    } else {
-                        locationString = outcode + " (" + model.areaName + ")";
-                    }
-
-                    $('#location').html(locationString);
-
-                    var formattedPrice = "£" + model.averagePrice.toLocaleString('en-GB');
-                    $('#average-price').html(formattedPrice);
-
-                    $('#transaction-count').html(model.transactionCount);
+                    locationString = outcode + " (" + response.areaName + ")";
                 }
-            });
-        }
-    };
+
+                // $('#location').html(locationString);
+                viewElements.location = locationString;
+
+                var formattedPrice = "£" + response.averagePrice.toLocaleString('en-GB');
+                // $('#average-price').html(formattedPrice);
+                viewElements.averagePrice = formattedPrice;
+
+                // $('#transaction-count').html(response.transactionCount);
+                viewElements.transactionCount = response.transactionCount;
+            }
+        });
+    }
 };
 
 module.exports = {
-    controller: PricesController
+    updateView: updateView,
+    viewElements: viewElements
 };

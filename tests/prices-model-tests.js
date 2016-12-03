@@ -3,7 +3,7 @@ var assert = require('chai').assert;
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
 
-describe('Prices-Model', function() {
+describe('PricesModel', function() {
 
     it('Can be initialised', function() {
         var prices = require('../prices-model');
@@ -41,7 +41,7 @@ describe('Prices-Model', function() {
             var mockUtils = { get: getStub };
             var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            prices.getPricesData("E17", function (model) {
+            prices.getPricesData("E17", function (error, model) {
                 assert.equal(model.outcode, "E17");
                 assert.equal(model.areaName, "London");
                 assert.equal(model.averagePrice, 100);
@@ -63,7 +63,7 @@ describe('Prices-Model', function() {
             var mockUtils = { get: getStub };
             var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            prices.getPricesData("invalid", function (model, url, error) {
+            prices.getPricesData("invalid", function (error) {
                 assert.isDefined(error);
                 done();
             });
@@ -75,7 +75,7 @@ describe('Prices-Model', function() {
             var mockUtils = { get: getStub };
             var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            prices.getPricesData("invalid", function (model, url, error) {
+            prices.getPricesData("invalid", function (error) {
                 assert.isDefined(error);
                 done();
             });
