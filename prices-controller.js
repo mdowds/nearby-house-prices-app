@@ -1,45 +1,38 @@
 'use strict';
 var model = require('./prices-model');
 
-var viewElements = function(errorElement, locationElement, averagePriceElement, transactionCountElement) {
-    this.errorMessage = errorElement;
+var viewElements = function(locationElement, averagePriceElement, transactionCountElement) {
     this.location = locationElement;
     this.averagePrice = averagePriceElement;
     this.transactionCount = transactionCountElement;
 };
 
-var updateView = function (outcode, viewElements) {
+var updateViewElements = function (coords, callback) {
 
-    if(outcode){
-        model.getPricesData(outcode, function(error, response){
+    if(coords){
+        model.getPricesData(coords, function(error, response){
 
             if(error != null || response.averagePrice == null){
-                viewElements.errorMessage = "Sorry, an error has occurred"
-                // $('#error-message').html("Sorry, an error has occurred");
+                callback("Sorry, an error has occurred", null);
+                return;
             } else {
-
                 var locationString;
                 if(response.areaName == null){
-                    locationString = outcode;
+                    locationString = response.outcode;
                 } else {
-                    locationString = outcode + " (" + response.areaName + ")";
+                    locationString = response.outcode + " (" + response.areaName + ")";
                 }
 
-                // $('#location').html(locationString);
-                viewElements.location = locationString;
-
                 var formattedPrice = "£" + response.averagePrice.toLocaleString('en-GB');
-                // $('#average-price').html(formattedPrice);
-                viewElements.averagePrice = formattedPrice;
-
-                // $('#transaction-count').html(response.transactionCount);
-                viewElements.transactionCount = response.transactionCount;
             }
+
+            var returnElements = new viewElements(locationString, formattedPrice, response.transactionCount);
+
+            callback(null, returnElements);
         });
     }
 };
 
 module.exports = {
-    updateView: updateView,
-    viewElements: viewElements
+    updateViewElements: updateViewElements
 };

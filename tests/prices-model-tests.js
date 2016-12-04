@@ -3,6 +3,11 @@ var assert = require('chai').assert;
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
 
+var mockCoords = {
+    latitude: 51.5,
+    longitude: -0.5
+};
+
 describe('PricesModel', function() {
 
     it('Can be initialised', function() {
@@ -18,8 +23,8 @@ describe('PricesModel', function() {
             var mockUtils = { get: getStub };
             var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            prices.getPricesData("E17");
-            assert.isTrue(getStub.calledWith("/prices/E17"));
+            prices.getPricesData(mockCoords);
+            assert.isTrue(getStub.calledWith("/prices/?lat=" + mockCoords.latitude + "&long=" + mockCoords.longitude));
         });
 
         it('Returns the correct values', function (done) {
@@ -41,7 +46,7 @@ describe('PricesModel', function() {
             var mockUtils = { get: getStub };
             var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            prices.getPricesData("E17", function (error, model) {
+            prices.getPricesData(mockCoords, function (error, model) {
                 assert.equal(model.outcode, "E17");
                 assert.equal(model.areaName, "London");
                 assert.equal(model.averagePrice, 100);
@@ -55,7 +60,7 @@ describe('PricesModel', function() {
             });
         });
 
-        it('Returns an error when given an invalid request', function (done) {
+        it('Returns an error when API returns invalid request', function (done) {
 
             var response = JSON.stringify({ "error": "An error occured: no valid data returned"});
 
@@ -63,7 +68,7 @@ describe('PricesModel', function() {
             var mockUtils = { get: getStub };
             var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            prices.getPricesData("invalid", function (error) {
+            prices.getPricesData(mockCoords, function (error) {
                 assert.isDefined(error);
                 done();
             });
@@ -75,7 +80,7 @@ describe('PricesModel', function() {
             var mockUtils = { get: getStub };
             var prices = proxyquire('../prices-model', {'./utils': mockUtils});
 
-            prices.getPricesData("invalid", function (error) {
+            prices.getPricesData(mockCoords, function (error) {
                 assert.isDefined(error);
                 done();
             });

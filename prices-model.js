@@ -13,8 +13,8 @@ var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, fla
     this.transactionCount = transactionCount;
 };
 
-var getPricesData = function(outcode, callback) {
-    var url = "/prices/" + outcode;
+var getPricesData = function(coords, callback) {
+    var url = "/prices/?lat=" + coords.latitude + "&long=" + coords.longitude;
 
     get(url, function (response, status) {
         if (status === 200) {
