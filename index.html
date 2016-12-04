@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Nearby Prices</title>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="prices-model.js"></script>
+    <script src="bundle.js"></script>
 </head>
-<body>
+<body onload="init()">
 
 <h1>Nearby Prices</h1>
 
@@ -22,6 +21,8 @@
         <td id="transaction-count"></td>
     </tr>
 </table>
+
+<div id="error-message"></div>
 
 </body>
 </html>
