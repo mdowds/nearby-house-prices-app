@@ -3,8 +3,8 @@ var assert = require('chai').assert;
 var sinon = require('sinon');
 var proxyquire = require('proxyquire');
 
-var pricesModel = require('../prices-model');
-var pricesController = require('../prices-controller');
+var pricesModel = require('../lib/prices-model');
+var pricesController = require('../lib/prices-controller');
 
 var mockCoords = {
     latitude: 51.5,
@@ -22,7 +22,7 @@ describe('PricesController', function() {
         it('Calls getPricesData() with coords', function() {
             var getPricesDataStub = sinon.stub();
             var mockPricesModel = { getPricesData: getPricesDataStub };
-            var controller = proxyquire('../prices-controller', {'./prices-model': mockPricesModel});
+            var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements(mockCoords);
             assert.isTrue(getPricesDataStub.calledWith(mockCoords));
@@ -31,7 +31,7 @@ describe('PricesController', function() {
         it('Does not call getPricesData() with no coords', function() {
             var getPricesDataStub = sinon.stub();
             var mockPricesModel = { getPricesData: getPricesDataStub };
-            var controller = proxyquire('../prices-controller', {'./prices-model': mockPricesModel});
+            var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements();
             assert.isFalse(getPricesDataStub.called);
@@ -46,7 +46,7 @@ describe('PricesController', function() {
 
             var mockPricesModel = { getPricesData: getPricesDataStub };
 
-            var controller = proxyquire('../prices-controller', {'./prices-model': mockPricesModel});
+            var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements(mockCoords, function (error, elements) {
                 assert.equal(elements.location, "E17 (London)");
@@ -65,7 +65,7 @@ describe('PricesController', function() {
 
             var mockPricesModel = { getPricesData: getPricesDataStub };
 
-            var controller = proxyquire('../prices-controller', {'./prices-model': mockPricesModel});
+            var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements(mockCoords, function (error) {
                 assert.isNotNull(error);
@@ -82,7 +82,7 @@ describe('PricesController', function() {
 
             var mockPricesModel = { getPricesData: getPricesDataStub };
 
-            var controller = proxyquire('../prices-controller', {'./prices-model': mockPricesModel});
+            var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements(mockCoords, function (error, elements) {
                 assert.equal(elements.location, "E17");
@@ -98,7 +98,7 @@ describe('PricesController', function() {
 
             var mockPricesModel = { getPricesData: getPricesDataStub };
 
-            var controller = proxyquire('../prices-controller', {'./prices-model': mockPricesModel});
+            var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements(mockCoords, function (error) {
                 assert.isNotNull(error);
