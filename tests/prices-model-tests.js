@@ -21,10 +21,11 @@ describe('PricesModel', function() {
 
             var getStub = sinon.stub();
             var mockUtils = { get: getStub };
-            var prices = proxyquire('../lib/prices-model', {'./utils': mockUtils});
+            var mockConfig = { apiUrl: ""};
+            var prices = proxyquire('../lib/prices-model', {'./config': mockConfig, './utils': mockUtils});
 
             prices.getPricesData(mockCoords);
-            assert.isTrue(getStub.calledWith("/prices/?lat=" + mockCoords.latitude + "&long=" + mockCoords.longitude));
+            assert.isTrue(getStub.calledWith("/prices/position?lat=" + mockCoords.latitude + "&long=" + mockCoords.longitude));
         });
 
         it('Returns the correct values', function (done) {

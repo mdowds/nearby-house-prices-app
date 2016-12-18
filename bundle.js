@@ -1,4 +1,8 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = {
+    apiUrl: "http://localhost:5000"
+};
+},{}],2:[function(require,module,exports){
 'use strict';
 var controller = require('./prices-controller');
 
@@ -6,7 +10,7 @@ function getLocation(callback){
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(callback);
     } else {
-        // x.innerHTML = "Geolocation is not supported by this browser.";
+        document.getElementById('error-message').innerHTML = "Geolocation is not supported by this browser.";
     }
 }
 
@@ -30,7 +34,7 @@ window.init = function() {
 module.exports = {
     getPricesForLocation: getPricesForLocation
 };
-},{"./prices-controller":2}],2:[function(require,module,exports){
+},{"./prices-controller":3}],3:[function(require,module,exports){
 'use strict';
 var model = require('./prices-model');
 
@@ -69,9 +73,10 @@ var updateViewElements = function (coords, callback) {
 module.exports = {
     updateViewElements: updateViewElements
 };
-},{"./prices-model":3}],3:[function(require,module,exports){
+},{"./prices-model":4}],4:[function(require,module,exports){
 'use strict';
 var get = require('./utils').get;
+var appConfig = require('./config');
 
 var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, flatAverage, semiDetachedAverage, terracedAverage, transactionCount) {
 
@@ -86,7 +91,8 @@ var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, fla
 };
 
 var getPricesData = function(coords, callback) {
-    var url = "/prices/?lat=" + coords.latitude + "&long=" + coords.longitude;
+
+    var url = appConfig.apiUrl + "/prices/position?lat=" + coords.latitude + "&long=" + coords.longitude;
 
     get(url, function (response, status) {
         if (status === 200) {
@@ -118,7 +124,7 @@ module.exports = {
     createModel: PricesModel
 };
 
-},{"./utils":4}],4:[function(require,module,exports){
+},{"./config":1,"./utils":5}],5:[function(require,module,exports){
 var get = function(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('GET', url);
@@ -133,4 +139,4 @@ var get = function(url, callback) {
 module.exports = {
     get: get
 };
-},{}]},{},[1]);
+},{}]},{},[2]);

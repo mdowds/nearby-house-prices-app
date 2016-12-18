@@ -22,20 +22,12 @@ var mockPosition = {
 };
 
 var mockViewElements = {
-    location: "E17 (London)",
+    location: "WC2N (London)",
     averagePrice: "£100,000",
     transactionCount: "1000"
-}
+};
 
 describe('Core', function() {
-
-    beforeEach(function() {
-        // browser = atomus()
-        //     .html('<h2 id="location"></h2><div id="average-price"></div><div id="transaction-count"></div><div id="error-message"></div>')
-        //     .external('core.js');
-
-
-    });
 
     describe('getLocation()', function () {
 
@@ -45,8 +37,6 @@ describe('Core', function() {
                 src: [core],
                 features : jsdomFeatures,
                 done: function (err, window) {
-                    // window.controller = { updateViewElements: function () {}};
-                    // console.log(window.controller);
                     window.navigator.geolocation = {};
                     window.navigator.geolocation.getCurrentPosition = function (callback) {
                         callback(mockPosition);
@@ -63,13 +53,20 @@ describe('Core', function() {
 
     describe('getPricesForLocation()', function () {
 
-        it('Calls updateViewElements() with position data and view elements', function() {
-            var updateViewElementsStub = sinon.stub();
-            var mockPricesController = { updateViewElements: updateViewElementsStub };
-            var view = proxyquire('../lib/core', {'./prices-controller': mockPricesController});
+        it('Calls updateViewElements() with position data and view elements', function(done) {
+            jsdom.env({
+                html: mockHTML,
+                src: [core],
+                features : jsdomFeatures,
+                done: function (err, window) {
+                    var updateViewElementsStub = sinon.stub();
+                    window.controller = { updateViewElements: updateViewElementsStub };;
 
-            view.getPricesForLocation(mockPosition);
-            assert.isTrue(updateViewElementsStub.calledWith(mockPosition.coords));
+                    window.getPricesForLocation(mockPosition);
+                    assert.isTrue(updateViewElementsStub.calledWith(mockPosition.coords));
+                    done();
+                }
+            });
         });
 
         it('Updates HTML with viewElement data', function (done) {
