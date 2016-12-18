@@ -109,8 +109,8 @@ var getPricesData = function(coords, callback) {
             );
 
             callback(null, model);
-        } else if (status === 500){
-            var error = JSON.parse(response).error;
+        } else if (status === 400){
+            var error = JSON.parse(response).errors;
             callback(error);
         } else {
             var error = {"error": "An unhandled request error was returned with status " + status};
