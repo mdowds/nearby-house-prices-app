@@ -17,7 +17,10 @@ function getLocation(callback){
 function getPricesForLocation(position) {
     controller.updateViewElements(position.coords, function (error, viewElements) {
         if(error){
-            document.getElementById('error-message').innerHTML = error;
+            if(typeof error == 'string'){
+                document.getElementById('error-message').innerHTML = error;
+            }
+            document.getElementById('overlay').style.display = "block";
             return;
         }
 
@@ -50,7 +53,7 @@ var updateViewElements = function (coords, callback) {
         model.getPricesData(coords, function(error, response){
 
             if(error != null || response.averagePrice == null){
-                callback("Sorry, an error has occurred", null);
+                callback(error, null);
                 return;
             } else {
                 var locationString;

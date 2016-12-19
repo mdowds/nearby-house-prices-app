@@ -2,27 +2,41 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Nearby Prices</title>
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <title>House Prices Near Me</title>
     <script src="bundle.js"></script>
+    <script src="https://use.fontawesome.com/ba2dee27eb.js"></script>
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body onload="init()">
 
-<h1>Nearby Prices</h1>
+<div id="title"><h1>House Prices Near Me</h1></div>
 
-<h2 id="location"></h2>
+<div id="main">
+    <h2 id="location"><span class="loading">Waiting for location...</span></h2>
 
-<table>
-    <tr>
-        <td>Average price</td>
-        <td id="average-price"></td>
-    </tr>
-    <tr>
-        <td>Number of transactions</td>
-        <td id="transaction-count"></td>
-    </tr>
-</table>
+    <table>
+        <tr>
+            <td><i class="fa fa-gbp fa-2x"></i></td>
+            <td>Average price</td>
+            <td id="average-price" class="value"><span class="loading">Loading</span></td>
+        </tr>
+        <tr>
+            <td><i class="fa fa-line-chart fa-2x"></i></td>
+            <td>Number of transactions</td>
+            <td id="transaction-count" class="value"><span class="loading">Loading</span></td>
+        </tr>
+    </table>
+</div>
 
-<div id="error-message"></div>
+<div id="overlay">
+    <div id="error">
+        Sorry, an error has occured. Please try again later.
+        <br>
+        <span id="error-message"></span>
+    </div>
+</div>
+
 
 </body>
 </html>
