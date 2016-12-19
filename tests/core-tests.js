@@ -15,7 +15,7 @@ var jsdomFeatures = {
 };
 
 // Mocks
-var mockHTML = '<h2 id="location"></h2><div id="average-price"></div><div id="transaction-count"></div><div id="error-message"></div>';
+var mockHTML = '<h2 id="location"></h2><div id="average-price"></div><div id="transaction-count"></div><div id="overlay" style="display: none"><div id="error-message"></div></div>';
 
 var mockPosition = {
     coords: { latitude: 51.5, longitude: -0.5}
@@ -84,6 +84,27 @@ describe('Core', function() {
                     assert.equal(window.document.getElementById('location').innerHTML, mockViewElements.location);
                     assert.equal(window.document.getElementById('average-price').innerHTML, mockViewElements.averagePrice);
                     assert.equal(window.document.getElementById('transaction-count').innerHTML, mockViewElements.transactionCount);
+
+                    done();
+                }
+            });
+        });
+
+        it('Makes overlay visible when error returned from controller', function (done) {
+            jsdom.env({
+                html: mockHTML,
+                src: [core],
+                features : jsdomFeatures,
+                done: function (err, window) {
+                    var errString = "Sorry, an error has occurred";
+
+                    window.controller = { updateViewElements: function (coords, callback) {
+                        callback(errString, null);
+                    }};
+
+                    window.getPricesForLocation(mockPosition);
+
+                    assert.equal(window.document.getElementById('overlay').style.display, "block");
 
                     done();
                 }
