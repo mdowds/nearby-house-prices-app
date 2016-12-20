@@ -29,6 +29,10 @@ tr td:first-child {
     width: 40px;
 }
 
+tr td:first-child img {
+    height: 32px;
+}
+
 tr td:last-child {
     padding-right: 20px;
 }
@@ -37,11 +41,12 @@ td {
     padding: 10px;
     border-bottom: 1px solid gray;
     font-size: 16px;
+    height: 36px;
 }
 
 div#title {
     width: 100%;
-    background-color: #15621c;
+    background-color: #920c00;
     color: white;
 }
 
@@ -60,10 +65,6 @@ div#main {
 div#main h2 {
     margin-top: 10px;
     font-size: 25px;
-}
-
-i.fa {
-    color: #15621c;
 }
 
 td.value {
