@@ -15,7 +15,7 @@ var jsdomFeatures = {
 };
 
 // Mocks
-var mockHTML = '<h2 id="location"></h2><div id="average-price"></div><div id="transaction-count"></div><div id="overlay" style="display: none"><div id="error-message"></div></div>';
+var mockHTML = '<h2 id="location"></h2><div id="average-price"></div><div id="transaction-count"></div><div id="overlay" style="display: none"><div id="error-message"></div></div><div id="map"></div>';
 
 var mockPosition = {
     coords: { latitude: 51.5, longitude: -0.5}
@@ -78,6 +78,7 @@ describe('Core', function() {
                     window.controller = { updateViewElements: function (coords, callback) {
                         callback(null, mockViewElements);
                     }};
+                    window.appConfig = { gmapsApiKey: "123456789" };
 
                     window.getPricesForLocation(mockPosition);
 

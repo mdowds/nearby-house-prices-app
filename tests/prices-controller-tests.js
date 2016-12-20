@@ -38,7 +38,7 @@ describe('PricesController', function() {
         });
 
         it('Calls callback with updated viewElements', function(done) {
-            var model = new pricesModel.createModel("E17", "London", 100000, 101000, 102000, 103000, 104000, 1000);
+            var model = new pricesModel.createModel("WC2N", "London", 100000, 101000, 102000, 103000, 104000, 1000);
 
             var getPricesDataStub = function (coords, callback) {
                 callback(null, model)
@@ -49,7 +49,8 @@ describe('PricesController', function() {
             var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements(mockCoords, function (error, elements) {
-                assert.equal(elements.location, "E17 (London)");
+                assert.equal(elements.outcode, "WC2N");
+                assert.equal(elements.location, "WC2N (London)");
                 assert.equal(elements.averagePrice, "£100,000");
                 assert.equal(elements.transactionCount, "1000");
                 done();
@@ -57,7 +58,7 @@ describe('PricesController', function() {
         });
 
         it('Calls callback with error message when averagePrice data is missing', function(done) {
-            var model = new pricesModel.createModel("E17", "London", null, 101000, 102000, 103000, 104000, 1000);
+            var model = new pricesModel.createModel("WC2N", "London", null, 101000, 102000, 103000, 104000, 1000);
 
             var getPricesDataStub = function (coords, callback) {
                 callback(null, model)
@@ -74,7 +75,7 @@ describe('PricesController', function() {
         });
 
         it('Omits area name when it is missing from data', function(done) {
-            var model = new pricesModel.createModel("E17", null, 100000, 101000, 102000, 103000, 104000, 1000);
+            var model = new pricesModel.createModel("WC2N", null, 100000, 101000, 102000, 103000, 104000, 1000);
 
             var getPricesDataStub = function (coords, callback) {
                 callback(null, model)
@@ -85,7 +86,7 @@ describe('PricesController', function() {
             var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
 
             controller.updateViewElements(mockCoords, function (error, elements) {
-                assert.equal(elements.location, "E17");
+                assert.equal(elements.location, "WC2N");
                 done();
             });
 

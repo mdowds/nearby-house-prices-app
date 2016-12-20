@@ -35,7 +35,7 @@ describe('PricesModel', function() {
                 "averagePrice": 100,
                 "detachedAverage": 101,
                 "flatAverage": 102,
-                "outcode": "E17",
+                "outcode": "WC2N",
                 "pastAveragePrice": 0,
                 "priceChange": 0,
                 "semiDetachedAverage": 103,
@@ -48,7 +48,7 @@ describe('PricesModel', function() {
             var prices = proxyquire('../lib/prices-model', {'./utils': mockUtils});
 
             prices.getPricesData(mockCoords, function (error, model) {
-                assert.equal(model.outcode, "E17");
+                assert.equal(model.outcode, "WC2N");
                 assert.equal(model.areaName, "London");
                 assert.equal(model.averagePrice, 100);
                 assert.equal(model.detachedAverage, 101);
