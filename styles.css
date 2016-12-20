@@ -136,3 +136,8 @@ div#error {
     border-top-color: #333;
     animation: spinner .6s linear infinite;
 }
+
+div.footer {
+    font-size: 10px;
+    text-align: center;
+}
