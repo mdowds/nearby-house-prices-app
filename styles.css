@@ -12,38 +12,6 @@ iframe, div#map {
     height: 300px;
 }
 
-table {
-    margin-top: 30px;
-    width: 100%;
-    border: 1px solid gray;
-    border-radius: 5px;
-    border-spacing: 0;
-}
-
-table tr:last-child td {
-    border-bottom: 0;
-}
-
-tr td:first-child {
-    text-align: center;
-    width: 40px;
-}
-
-tr td:first-child img {
-    height: 32px;
-}
-
-tr td:last-child {
-    padding-right: 20px;
-}
-
-td {
-    padding: 10px;
-    border-bottom: 1px solid gray;
-    font-size: 16px;
-    height: 36px;
-}
-
 div#title {
     width: 100%;
     background-color: #920c00;
@@ -59,18 +27,65 @@ div#title h1 {
 div#main {
     max-width: 500px;
     margin: auto;
-    padding: 10px;
+    padding: 0 10px;
 }
 
 div#main h2 {
-    margin-top: 10px;
+    margin: 20px;
     font-size: 25px;
 }
 
+table {
+    margin: 20px 0;
+    width: 100%;
+    border: 1px solid gray;
+    border-radius: 5px;
+    border-spacing: 0;
+}
+
+table tr:last-child td {
+    border-bottom: 0;
+}
+
+tr td:last-child {
+    padding-right: 20px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid gray;
+}
+
 td.value {
-    font-size: 20px;
     width: 1%;
     white-space: nowrap;
+}
+
+table.main-stats tr td:first-child {
+    text-align: center;
+    width: 40px;
+}
+
+table.main-stats tr td:first-child img {
+    height: 32px;
+}
+
+table.main-stats td {
+    font-size: 16px;
+    height: 36px;
+}
+
+table.main-stats td.value {
+    font-size: 20px;
+}
+
+table.type-stats td {
+    font-size: 13px;
+    height: 25px;
+}
+
+table.type-stats td.value {
+    font-size: 17px;
 }
 
 span.loading {

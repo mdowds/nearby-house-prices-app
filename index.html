@@ -14,9 +14,7 @@
 <div id="main">
     <h2 id="location"><span class="loading">Waiting for location...</span></h2>
 
-    <div id="map"><div id="map-spinner" class="spinner"></div></div>
-
-    <table>
+    <table class="main-stats">
         <tr>
             <td><img src="img/pound.svg" /></td>
             <td>Average price</td>
@@ -26,6 +24,27 @@
             <td><img src="img/houses.svg" /></td>
             <td>Number of transactions</td>
             <td id="transaction-count" class="value"><span class="loading">Loading</span></td>
+        </tr>
+    </table>
+
+    <div id="map"><div id="map-spinner" class="spinner"></div></div>
+
+    <table class="type-stats">
+        <tr>
+            <td>Average price of detached house</td>
+            <td id="detached-average" class="value"><span class="loading">Loading</span></td>
+        </tr>
+        <tr>
+            <td>Average price of flat</td>
+            <td id="flat-average" class="value"><span class="loading">Loading</span></td>
+        </tr>
+        <tr>
+            <td>Average price of semi-detached house</td>
+            <td id="semidetached-average" class="value"><span class="loading">Loading</span></td>
+        </tr>
+        <tr>
+            <td>Average price of terraced house</td>
+            <td id="terraced-average" class="value"><span class="loading">Loading</span></td>
         </tr>
     </table>
 </div>

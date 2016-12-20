@@ -53,6 +53,10 @@ describe('PricesController', function() {
                 assert.equal(elements.location, "WC2N (London)");
                 assert.equal(elements.averagePrice, "£100,000");
                 assert.equal(elements.transactionCount, "1000");
+                assert.equal(elements.detachedAverage, "£101,000");
+                assert.equal(elements.flatAverage, "£102,000");
+                assert.equal(elements.semiDetachedAverage, "£103,000");
+                assert.equal(elements.terracedAverage, "£104,000");
                 done();
             });
         });

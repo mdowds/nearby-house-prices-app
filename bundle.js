@@ -32,6 +32,11 @@ function getPricesForLocation(position) {
         document.getElementById('average-price').innerHTML = viewElements.averagePrice;
         document.getElementById('transaction-count').innerHTML = viewElements.transactionCount;
 
+        document.getElementById('detached-average').innerHTML = viewElements.detachedAverage;
+        document.getElementById('flat-average').innerHTML = viewElements.flatAverage;
+        document.getElementById('semidetached-average').innerHTML = viewElements.semiDetachedAverage;
+        document.getElementById('terraced-average').innerHTML = viewElements.terracedAverage;
+
         loadMap(viewElements.outcode);
     });
 }
@@ -64,11 +69,16 @@ module.exports = {
 'use strict';
 var model = require('./prices-model');
 
-var viewElements = function(outcode, location, averagePrice, transactionCount) {
+var viewElements = function(outcode, location, averagePrice, transactionCount, detached, flat, semiDetached, terraced) {
     this.outcode = outcode;
     this.location = location;
     this.averagePrice = averagePrice;
     this.transactionCount = transactionCount;
+
+    this.detachedAverage = detached;
+    this.flatAverage = flat;
+    this.semiDetachedAverage = semiDetached;
+    this.terracedAverage = terraced;
 };
 
 var updateViewElements = function (coords, callback) {
@@ -90,15 +100,28 @@ var updateViewElements = function (coords, callback) {
                     locationString = response.outcode + " (" + response.areaName + ")";
                 }
 
-                var formattedPrice = "£" + response.averagePrice.toLocaleString('en-GB');
+
             }
 
-            var returnElements = new viewElements(response.outcode, locationString, formattedPrice, response.transactionCount);
+            var returnElements = new viewElements(
+                response.outcode,
+                locationString,
+                formatPrice(response.averagePrice),
+                response.transactionCount,
+                formatPrice(response.detachedAverage),
+                formatPrice(response.flatAverage),
+                formatPrice(response.semiDetachedAverage),
+                formatPrice(response.terracedAverage)
+            );
 
             callback(null, returnElements);
         });
     }
 };
+
+function formatPrice(price) {
+    return "£" + price.toLocaleString('en-GB');
+}
 
 module.exports = {
     updateViewElements: updateViewElements
