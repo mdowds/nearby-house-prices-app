@@ -44,7 +44,7 @@ function getPricesForLocation(position) {
 function loadMap(outcode) {
 
     var map = document.createElement('iframe');
-    var url = "https://www.google.com/maps/embed/v1/place?key=" + appConfig.gmapsApiKey + "&q=" + outcode;
+    var url = "https://www.google.com/maps/embed/v1/place?key=" + appConfig.gmapsApiKey + "&q=" + outcode + "+UK";
     map.src = url;
     map.frameBorder = 0;
     map.style.border = 0;
@@ -99,8 +99,6 @@ var updateViewElements = function (coords, callback) {
                 } else {
                     locationString = response.outcode + " (" + response.areaName + ")";
                 }
-
-
             }
 
             var returnElements = new viewElements(
