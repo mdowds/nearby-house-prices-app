@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mdowds/nearbyprices-app.git"
+    "url": "git+https://github.com/mdowds/nearby-house-prices-app.git"
   },
   "author": "Matt Dowds",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/mdowds/nearbyprices-app/issues"
+    "url": "https://github.com/mdowds/nearby-house-prices-app/issues"
   },
-  "homepage": "https://github.com/mdowds/nearbyprices-app#readme"
+  "homepage": "https://github.com/mdowds/nearby-house-prices-app#readme"
 }
