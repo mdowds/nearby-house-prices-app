@@ -111,6 +111,23 @@ describe('PricesController', function() {
             });
         });
 
+        it('Returns a non-null value when one of the type averages is missing', function(done) {
+            var model = new pricesModel.createModel("WC2N", "London", 100000, null, 102000, 103000, 104000, 1000);
+
+            var getPricesDataStub = function (coords, callback) {
+                callback(null, model)
+            };
+
+            var mockPricesModel = { getPricesData: getPricesDataStub };
+
+            var controller = proxyquire('../lib/prices-controller', {'./prices-model': mockPricesModel});
+
+            controller.updateViewElements(mockCoords, function (error, elements) {
+                assert.isNotNull(elements.detachedAverage);
+                done();
+            });
+        });
+
     });
 
 });

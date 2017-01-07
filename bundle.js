@@ -86,24 +86,15 @@ var updateViewElements = function (coords, callback) {
     if(coords){
         model.getPricesData(coords, function(error, response){
 
-            if(error != null) {
-                callback(error, null);
+            var responseError = checkForErrors(error, response);
+            if(responseError != null){
+                callback(responseError, null);
                 return;
-            } else if(response.averagePrice == null){
-                callback("No average price data", null);
-                return;
-            } else {
-                var locationString;
-                if(response.areaName == null){
-                    locationString = response.outcode;
-                } else {
-                    locationString = response.outcode + " (" + response.areaName + ")";
-                }
             }
 
             var returnElements = new viewElements(
                 response.outcode,
-                locationString,
+                formatLocationString(response.areaName, response.outcode),
                 formatPrice(response.averagePrice),
                 response.transactionCount,
                 formatPrice(response.detachedAverage),
@@ -117,7 +108,29 @@ var updateViewElements = function (coords, callback) {
     }
 };
 
+function checkForErrors(error, response) {
+    if(error != null) {
+        return error;
+    } else if(response.averagePrice == null){
+        return "No average price data";
+    } else {
+        return null;
+    }
+}
+
+function formatLocationString(areaName, outcode){
+    if(areaName == null){
+        return outcode;
+    } else {
+        return outcode + " (" + areaName + ")";
+    }
+}
+
 function formatPrice(price) {
+    if(price == null){
+        return "No data";
+    }
+
     return "£" + price.toLocaleString('en-GB');
 }
 
