@@ -5,10 +5,10 @@ var jsdom = require("jsdom");
 var fs = require("fs");
 var proxyquire = require('proxyquire');
 
-var pricesController = require('../lib/prices-controller');
+var pricesController = require('../src/prices-controller');
 
 // jsdom setup
-var core = fs.readFileSync("./lib/core.js", "utf-8");
+var core = fs.readFileSync("./src/core.js", "utf-8");
 var jsdomFeatures = {
     FetchExternalResources : ['script'],
     ProcessExternalResources : ['script']
@@ -91,7 +91,7 @@ describe('Core', function() {
                     window.controller = { updateViewElements: function (coords, callback) {
                         callback(null, mockViewElements);
                     }};
-                    window.appConfig = { gmapsApiKey: "123456789" };
+                    // console.log(process.env);
 
                     window.getPricesForLocation(mockPosition);
 

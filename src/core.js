@@ -1,15 +1,17 @@
 'use strict';
 var controller = require('./prices-controller');
 
-function getLocation(callback){
+function getLocation(callback, gmapsApiKey){
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(callback);
+        navigator.geolocation.getCurrentPosition(function(position){
+            callback(position, gmapsApiKey)
+        });
     } else {
         handleError("Geolocation is not supported by this browser.");
     }
 }
 
-function getPricesForLocation(position) {
+function getPricesForLocation(position, gmapsApiKey) {
     controller.updateViewElements(position.coords, function (error, viewElements) {
         if(error){
             var message = "";
@@ -29,13 +31,11 @@ function getPricesForLocation(position) {
         document.getElementById('semidetached-average').innerHTML = viewElements.semiDetachedAverage;
         document.getElementById('terraced-average').innerHTML = viewElements.terracedAverage;
 
-        loadMap(viewElements.outcode);
+        loadMap(viewElements.outcode, gmapsApiKey);
     });
 }
 
-function loadMap(outcode) {
-
-    var gmapsApiKey = process.env.GMAPS_API_KEY;
+function loadMap(outcode, gmapsApiKey) {
     var map = document.createElement('iframe');
     map.src = "https://www.google.com/maps/embed/v1/place?key=" + gmapsApiKey + "&q=" + outcode + "+United+Kingdom";
     map.frameBorder = 0;
@@ -51,7 +51,8 @@ function handleError(message) {
 }
 
 window.init = function() {
-    getLocation(getPricesForLocation);
+    var gmapsApiKey = process.env.GMAPS_API_KEY;
+    getLocation(getPricesForLocation, gmapsApiKey);
 };
 
 module.exports = {

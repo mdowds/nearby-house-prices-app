@@ -15,7 +15,7 @@ var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, fla
 
 var getPricesData = function(coords, callback) {
 
-    var apiBaseUrl = process.env.NHP_API_URL || "http://localhost:4000";
+    var apiBaseUrl = process.env.NHP_API_URL;
     var url = apiBaseUrl + "/prices/position?lat=" + coords.latitude + "&long=" + coords.longitude;
 
     get(url, function (response, status) {

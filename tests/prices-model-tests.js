@@ -11,7 +11,7 @@ var mockCoords = {
 describe('PricesModel', function() {
 
     it('Can be initialised', function() {
-        var prices = require('../lib/prices-model');
+        var prices = require('../src/prices-model');
         assert.isDefined(prices);
     });
 
@@ -22,8 +22,9 @@ describe('PricesModel', function() {
             var getStub = sinon.stub();
             var mockUtils = { get: getStub };
             var mockConfig = { apiUrl: ""};
-            var prices = proxyquire('../lib/prices-model', {'./config': mockConfig, './utils': mockUtils});
+            process.env.NHP_API_URL = "";
 
+            var prices = proxyquire('../src/prices-model', {'./config': mockConfig, './utils': mockUtils});
             prices.getPricesData(mockCoords);
             assert.isTrue(getStub.calledWith("/prices/position?lat=" + mockCoords.latitude + "&long=" + mockCoords.longitude));
         });
@@ -45,7 +46,7 @@ describe('PricesModel', function() {
 
             var getStub = sinon.stub().callsArgWith(1, response, 200); // Call the second arg (1) passed to getStub as a callback, with other params as params for the callback
             var mockUtils = { get: getStub };
-            var prices = proxyquire('../lib/prices-model', {'./utils': mockUtils});
+            var prices = proxyquire('../src/prices-model', {'./utils': mockUtils});
 
             prices.getPricesData(mockCoords, function (error, model) {
                 assert.equal(model.outcode, "WC2N");
@@ -67,7 +68,7 @@ describe('PricesModel', function() {
 
             var getStub = sinon.stub().callsArgWith(1, response, 500);
             var mockUtils = { get: getStub };
-            var prices = proxyquire('../lib/prices-model', {'./utils': mockUtils});
+            var prices = proxyquire('../src/prices-model', {'./utils': mockUtils});
 
             prices.getPricesData(mockCoords, function (error) {
                 assert.isDefined(error);
@@ -79,7 +80,7 @@ describe('PricesModel', function() {
 
             var getStub = sinon.stub().callsArgWith(1, null, 404);
             var mockUtils = { get: getStub };
-            var prices = proxyquire('../lib/prices-model', {'./utils': mockUtils});
+            var prices = proxyquire('../src/prices-model', {'./utils': mockUtils});
 
             prices.getPricesData(mockCoords, function (error) {
                 assert.isDefined(error);
