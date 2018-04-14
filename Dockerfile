@@ -1,5 +1,9 @@
 FROM node:alpine
 WORKDIR /build
+
+ARG GMAPS_API_KEY
+ARG NHP_API_URL
+
 COPY package.json /build/package.json
 COPY package-lock.json /build/package-lock.json
 COPY src /build/src
