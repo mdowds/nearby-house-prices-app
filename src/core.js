@@ -1,6 +1,5 @@
 'use strict';
 var controller = require('./prices-controller');
-var appConfig = require('./config');
 
 function getLocation(callback){
     if (navigator.geolocation) {
@@ -14,7 +13,7 @@ function getPricesForLocation(position) {
     controller.updateViewElements(position.coords, function (error, viewElements) {
         if(error){
             var message = "";
-            if(typeof error == 'string'){
+            if(typeof error === 'string'){
                 message = error;
             }
             handleError(message);
@@ -36,9 +35,9 @@ function getPricesForLocation(position) {
 
 function loadMap(outcode) {
 
+    var gmapsApiKey = process.env.GMAPS_API_KEY;
     var map = document.createElement('iframe');
-    var url = "https://www.google.com/maps/embed/v1/place?key=" + appConfig.gmapsApiKey + "&q=" + outcode + "+UK";
-    map.src = url;
+    map.src = "https://www.google.com/maps/embed/v1/place?key=" + gmapsApiKey + "&q=" + outcode + "+United+Kingdom";
     map.frameBorder = 0;
     map.style.border = 0;
 

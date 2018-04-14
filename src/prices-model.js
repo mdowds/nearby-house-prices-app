@@ -1,6 +1,5 @@
 'use strict';
 var get = require('./utils').get;
-var appConfig = require('./config');
 
 var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, flatAverage, semiDetachedAverage, terracedAverage, transactionCount) {
 
@@ -16,7 +15,8 @@ var PricesModel = function(outcode, areaName, averagePrice, detachedAverage, fla
 
 var getPricesData = function(coords, callback) {
 
-    var url = appConfig.apiUrl + "/prices/position?lat=" + coords.latitude + "&long=" + coords.longitude;
+    var apiBaseUrl = process.env.NHP_API_URL || "http://localhost:4000";
+    var url = apiBaseUrl + "/prices/position?lat=" + coords.latitude + "&long=" + coords.longitude;
 
     get(url, function (response, status) {
         if (status === 200) {
@@ -33,11 +33,10 @@ var getPricesData = function(coords, callback) {
             );
 
             callback(null, model);
-        } else if (status === 400){
-            var error = JSON.parse(response).errors;
-            callback(error);
         } else {
-            var error = {"error": "An unhandled request error was returned with status " + status};
+            var error = status === 400 ?
+                JSON.parse(response).errors :
+                {"error": "An unhandled request error was returned with status " + status};
             callback(error);
         }
     });
