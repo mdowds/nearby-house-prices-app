@@ -21,10 +21,9 @@ describe('PricesModel', function() {
 
             var getStub = sinon.stub();
             var mockUtils = { get: getStub };
-            var mockConfig = { apiUrl: ""};
             process.env.NHP_API_URL = "";
 
-            var prices = proxyquire('../src/prices-model', {'./config': mockConfig, './utils': mockUtils});
+            var prices = proxyquire('../src/prices-model', {'./utils': mockUtils});
             prices.getPricesData(mockCoords);
             assert.isTrue(getStub.calledWith("/prices/position?lat=" + mockCoords.latitude + "&long=" + mockCoords.longitude));
         });
