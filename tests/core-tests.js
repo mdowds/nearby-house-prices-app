@@ -1,11 +1,8 @@
 'use strict';
 var assert = require('chai').assert;
 var sinon = require('sinon');
-var jsdom = require("jsdom");
+var jsdom = require("jsdom/lib/old-api.js");
 var fs = require("fs");
-var proxyquire = require('proxyquire');
-
-var pricesController = require('../src/prices-controller');
 
 // jsdom setup
 var core = fs.readFileSync("./src/core.js", "utf-8");
@@ -91,7 +88,6 @@ describe('Core', function() {
                     window.controller = { updateViewElements: function (coords, callback) {
                         callback(null, mockViewElements);
                     }};
-                    // console.log(process.env);
 
                     window.getPricesForLocation(mockPosition);
 
