@@ -14,7 +14,7 @@
     "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
     "proxyquire": "^2.0.1",
-    "sinon": "^5.0.10"
+    "sinon": "^6.3.4"
   },
   "scripts": {
     "build": "GMAPS_API_KEY=$GMAPS_API_KEY NHP_API_URL=$NHP_API_URL npx browserify src/core.js -t envify > bundle.js",
