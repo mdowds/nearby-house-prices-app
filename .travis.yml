@@ -1,3 +1,16 @@
 language: node_js
 node_js: node
-after_script: istanbul cover ./node_modules/mocha/bin/_mocha tests/* --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage
+script:
+  - yarn
+  - yarn build
+  - yarn test
+deploy:
+  provider: gcs
+  access_key_id: GOOGDQAHALXVRJ5RGDXPS7TL
+  secret_access_key:
+    secure: TD+RcwHO3Igb/pUPzpTt7+JqpHx2N9gohPQqefmT60BaKtIExKvraAHkqm/vutI6U3b9+JFTyNhgQ+XshSZryoiyyYp+0dAl3sikyI3v6KKyHFwAcr5SUbYDI3dS32JQrDpFRzN8FrIgKhLxsKrSTPEKu+LgtSgAwOgTjFbxsgrbOoH8eUzi1LVc+uq/ggyM2CALznE0hbqhoNsk5Lm7BGwH+pnMAk+OgAwO73mftJkgC9qesqPAWeuH01CPBJlsyXS4grMfT09FF34xkdKmJ6ZM2toe07hE3giz4D0SKeFiimLYWRQ6RBi+wcwqFv/8k+7ePjVhJyLcgap8+7gYRup/EJPFFgbxsAc4q418j/+zA5zwrJ59x5Ai27SNlPFM8oRm3wMyFtTpZqtmHxjmHrxaO+rMaiLptmZUi1KgUdYBS5FGDRB3P/vR7cycvdmrmWx3UtOOlmCPWkbahGuSHXenAfQxrBULpcYdCJbdorTOZhr0AZSq9/7ReksHUFd6IfQIAHoVnIrGE48o6EOFq6/WZYLNF4lzdnPvH2GDJ9+0hXOZKzSN+fzNZNpR/eqRA7XDSfk7YIBlMZUovWoqwnUIjQwC1yoE56OagMdjREdZeuYAtBQTI8Lj0kebb8+2EumxDA+kpeFwLUjmrXzk66yYghkR+06hs43XSJPhsFM=
+  bucket: nearbyhouseprices-web
+  local-dir: static
+  skip_cleanup: true
+  on:
+    repo: mdowds/nearby-house-prices-app
