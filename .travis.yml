@@ -1,7 +1,7 @@
 language: node_js
 node_js: node
 env:
-  - NHP_API_URL=https://mdowds.com/nearbyhouseprices/api
+  - NHP_API_URL=/nearbyhouseprices/api
 script:
   - yarn
   - yarn build
