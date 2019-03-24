@@ -1,7 +1,7 @@
 language: node_js
 node_js: node
 env:
-  - NHP_API_URL=/nearbyhouseprices/api
+  - NHP_API_URL=https://nearbyhouseprices-api.herokuapp.com
 script:
   - yarn
   - yarn build
